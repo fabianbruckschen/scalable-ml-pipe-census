@@ -2,8 +2,10 @@
 import joblib
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-from typing import Literal, Optional
+from typing import Literal, Optional, Dict, Any
 import pandas as pd
+from xgboost import XGBClassifier
+from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
 
 from model.ml.data import process_data
 from model.ml.model import inference
@@ -14,9 +16,9 @@ app = FastAPI()
 
 # Load the model and encoders (assuming they're saved)
 try:
-    model = joblib.load("model/artifacts/model.joblib")
-    encoder = joblib.load("model/artifacts/encoder.joblib")
-    lb = joblib.load("model/artifacts/lb.joblib")
+    model: XGBClassifier = joblib.load("model/artifacts/model.joblib")
+    encoder: OneHotEncoder = joblib.load("model/artifacts/encoder.joblib")
+    lb: LabelBinarizer = joblib.load("model/artifacts/lb.joblib")
 except FileNotFoundError as e:
     print(f"Error loading model files: {e}")
     raise
@@ -62,12 +64,12 @@ class CensusData(BaseModel):
 
 
 @app.get("/")
-async def welcome():
+async def welcome() -> Dict[str, str]:
     return {"message": "Welcome to the Census Income Prediction API"}
 
 
 @app.post("/predict")
-async def predict(data: CensusData):
+async def predict(data: CensusData) -> Dict[str, Any]:
     try:
         # Convert input data to DataFrame
         df = pd.DataFrame([data.dict(by_alias=True)])
