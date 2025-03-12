@@ -32,7 +32,7 @@ jobs:
       run: |
         pytest
     - name: Deploy to production
-      uses: fabianbruckschen/scalable-ml-pipe-census
+      uses: fabianbruckschen/scalable-ml-pipe-census@latest
       with:
         service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
         api-key: ${{ secrets.MY_RENDER_API_KEY }}
