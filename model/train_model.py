@@ -13,7 +13,7 @@ from ml.model import train_model, inference, compute_and_log_metrics_by_slice
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler("train_model.log"), logging.StreamHandler()],
+    handlers=[logging.FileHandler("slice_output.txt"), logging.StreamHandler()],
 )
 logger = logging.getLogger(__name__)
 
